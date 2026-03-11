@@ -90,3 +90,47 @@
     @apply font-sans;
   }
 }
+
+/* ── Custom thin scrollbar ── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary);
+}
+
+/* ── Line-tabs: active indicator uses primary color ── */
+.line-tabs [data-slot="tabs-trigger"]::after {
+  background-color: var(--primary) !important;
+}
+.line-tabs [data-slot="tabs-list"] {
+  width: 100%;
+  justify-content: flex-start;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+  height: auto;
+}
+.line-tabs [data-slot="tabs-trigger"] {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-bottom: 0.625rem;
+}
+
+/* ── Sidebar nav items: subtle muted default, full color on hover ── */
+[data-sidebar="menu-button"]:not([data-size="lg"]) {
+  color: color-mix(in srgb, var(--sidebar-foreground) 70%, transparent);
+  transition:
+    color 0.12s ease,
+    background-color 0.12s ease;
+}
+[data-sidebar="menu-button"]:not([data-size="lg"]):hover {
+  color: var(--sidebar-foreground);
+}

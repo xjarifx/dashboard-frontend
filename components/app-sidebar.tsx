@@ -2,8 +2,8 @@
 
 import * as React from "react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboardIcon,
@@ -29,13 +30,12 @@ import {
   DatabaseIcon,
   FileChartColumnIcon,
   FileIcon,
-  CommandIcon,
 } from "lucide-react";
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Jordan Rivera",
+    email: "jordan@meridian.io",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
@@ -72,14 +72,8 @@ const data = {
       isActive: true,
       url: "#",
       items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
+        { title: "Active Proposals", url: "#" },
+        { title: "Archived", url: "#" },
       ],
     },
     {
@@ -87,14 +81,8 @@ const data = {
       icon: <FileTextIcon />,
       url: "#",
       items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
+        { title: "Active Proposals", url: "#" },
+        { title: "Archived", url: "#" },
       ],
     },
     {
@@ -102,14 +90,8 @@ const data = {
       icon: <FileTextIcon />,
       url: "#",
       items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
+        { title: "Active Proposals", url: "#" },
+        { title: "Archived", url: "#" },
       ],
     },
   ],
@@ -151,28 +133,40 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
+    <Sidebar collapsible="offcanvas" className="border-r-0" {...props}>
+      <SidebarHeader className="gap-3 px-3 pt-3 pb-2">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
+              className="h-auto rounded-xl border border-sidebar-border/70 bg-sidebar py-2.5 shadow-none hover:bg-sidebar-accent/20! focus-visible:bg-sidebar-accent/20! active:bg-sidebar-accent/20!"
             >
-              <a href="#">
-                <CommandIcon className="size-5!" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+              <a href="#" className="flex items-center gap-3 px-1">
+                <div className="flex size-8 shrink-0 select-none items-center justify-center rounded-lg bg-primary text-sm font-black tracking-tight text-primary-foreground">
+                  M/
+                </div>
+                <div className="min-w-0 group-data-[collapsible=icon]:hidden">
+                  <p className="truncate text-base font-bold tracking-tight">
+                    Meridian
+                  </p>
+                  <p className="truncate text-[11px] text-sidebar-foreground/60">
+                    Product Analytics
+                  </p>
+                </div>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
+        <SidebarSeparator className="bg-sidebar-border/60" />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="gap-1 px-2 pb-2">
         <NavMain items={data.navMain} />
+        <SidebarSeparator className="my-1 bg-sidebar-border/50" />
         <NavDocuments items={data.documents} />
+        <SidebarSeparator className="mt-auto mb-1 bg-sidebar-border/50" />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="px-2 pb-3 pt-2">
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>

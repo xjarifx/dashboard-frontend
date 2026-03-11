@@ -4,14 +4,7 @@ import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
 import { useIsMobile } from "@/hooks/use-mobile"
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
@@ -25,10 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 export const description = "An interactive area chart"
 
@@ -140,6 +130,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+const timeLabels: Record<string, string> = {
+  "90d": "Last 3 months",
+  "30d": "Last 30 days",
+  "7d": "Last 7 days",
+}
+
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile()
   const [timeRange, setTimeRange] = React.useState("90d")
@@ -165,50 +161,56 @@ export function ChartAreaInteractive() {
   })
 
   return (
-    <Card className="@container/card">
-      <CardHeader>
-        <CardTitle>Total Visitors</CardTitle>
-        <CardDescription>
-          <span className="hidden @[540px]/card:block">
-            Total for the last 3 months
-          </span>
-          <span className="@[540px]/card:hidden">Last 3 months</span>
-        </CardDescription>
-        <CardAction>
+    <Card className="@container/card overflow-hidden border border-border shadow-none">
+      {/* Custom header — replaces CardHeader/CardTitle/CardDescription/CardAction */}
+      <div className="flex items-start justify-between gap-4 px-5 pb-3 pt-5 @[540px]/card:px-6 @[540px]/card:pt-6">
+        <div className="flex flex-col gap-0.5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+            Analytics
+          </p>
+          <h2 className="text-lg font-bold tracking-tight">Total Visitors</h2>
+          <p className="mt-0.5 hidden text-sm text-muted-foreground @[540px]/card:block">
+            {timeLabels[timeRange]}
+          </p>
+        </div>
+
+        <div className="flex shrink-0 flex-col items-end gap-2">
+          {/* Compact pill toggle — desktop */}
           <ToggleGroup
             type="single"
             value={timeRange}
-            onValueChange={setTimeRange}
-            variant="outline"
-            className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
+            onValueChange={(v) => v && setTimeRange(v)}
+            className="hidden h-7 gap-0 rounded-lg bg-muted/50 p-0.5 @[767px]/card:flex"
           >
-            <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-            <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+            {(["90d", "30d", "7d"] as const).map((val) => (
+              <ToggleGroupItem
+                key={val}
+                value={val}
+                className="h-6 rounded-md px-3 text-xs font-medium data-[state=on]:bg-background data-[state=on]:shadow-xs"
+              >
+                {val === "90d" ? "3M" : val === "30d" ? "30D" : "7D"}
+              </ToggleGroupItem>
+            ))}
           </ToggleGroup>
+
+          {/* Dropdown — mobile */}
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger
-              className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
-              size="sm"
+              className="h-7 w-36 text-xs @[767px]/card:hidden"
               aria-label="Select a value"
             >
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="90d" className="rounded-lg">
-                Last 3 months
-              </SelectItem>
-              <SelectItem value="30d" className="rounded-lg">
-                Last 30 days
-              </SelectItem>
-              <SelectItem value="7d" className="rounded-lg">
-                Last 7 days
-              </SelectItem>
+            <SelectContent>
+              <SelectItem value="90d">Last 3 months</SelectItem>
+              <SelectItem value="30d">Last 30 days</SelectItem>
+              <SelectItem value="7d">Last 7 days</SelectItem>
             </SelectContent>
           </Select>
-        </CardAction>
-      </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+        </div>
+      </div>
+
+      <CardContent className="px-2 pb-4 pt-1 sm:px-6 sm:pb-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
